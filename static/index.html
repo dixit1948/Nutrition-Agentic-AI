@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NutriAI — IBM Granite Nutrition Agent</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Marked.js for Markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+
+<!-- ══════════════════════════ HEADER ══════════════════════════════════════ -->
+<header class="app-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-icon">🥗</span>
+      <div>
+        <h1 class="brand-name">NutriAI</h1>
+        <p class="brand-sub">Powered by <strong>IBM Granite LLM</strong></p>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <button class="nav-btn active" data-tab="home"    onclick="showTab('home')">🏠 Home</button>
+      <button class="nav-btn"        data-tab="profile" onclick="showTab('profile')">👤 Profile</button>
+      <button class="nav-btn"        data-tab="plan"    onclick="showTab('plan')">📋 My Plan</button>
+      <button class="nav-btn"        data-tab="chat"    onclick="showTab('chat')">💬 Chat</button>
+      <button class="nav-btn"        data-tab="saved"   onclick="showTab('saved')">📁 Saved Plans</button>
+    </nav>
+    <div class="status-dot" id="statusDot" title="Checking API…">
+      <span class="dot"></span>
+      <span class="status-label" id="statusLabel">Connecting…</span>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════ MAIN ════════════════════════════════════════ -->
+<main>
+
+  <!-- ── HOME TAB ─────────────────────────────────────────────────────── -->
+  <section id="tab-home" class="tab-section active">
+    <div class="hero">
+      <div class="hero-content">
+        <h2>Your Personalized AI Nutritionist</h2>
+        <p class="hero-desc">
+          NutriAI uses <strong>IBM Granite</strong>, an enterprise-grade large language model,
+          to generate science-backed, culturally aware, and medically mindful nutrition plans
+          tailored just for you.
+        </p>
+        <div class="hero-cta">
+          <button class="btn btn-primary btn-lg" onclick="showTab('profile')">
+            ✨ Create My Nutrition Plan
+          </button>
+          <button class="btn btn-secondary btn-lg" onclick="showTab('chat')">
+            💬 Ask NutriAI
+          </button>
+        </div>
+      </div>
+      <div class="hero-illustration">
+        <div class="hero-circle">
+          <span class="hero-emoji">🥗</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features grid -->
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">🤖</span>
+        <h3>IBM Granite LLM</h3>
+        <p>Powered by IBM's enterprise AI model for accurate, responsible nutrition guidance.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🛡️</span>
+        <h3>AI Ethics & Guardrails</h3>
+        <p>Built-in safety filters, bias detection, and ethical AI principles protect every response.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🌍</span>
+        <h3>Culturally Aware</h3>
+        <p>Nutrition plans are tailored to your location, incorporating locally available foods.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🏥</span>
+        <h3>Medical Conditions</h3>
+        <p>Addresses diabetes, hypertension, and other conditions with specific dietary guidance.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">💾</span>
+        <h3>Save Your Plan</h3>
+        <p>Download your personalized plan as a Markdown file for easy reference and sharing.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">💬</span>
+        <h3>Agentic Chatbot</h3>
+        <p>Ask follow-up questions and get instant answers from your AI nutrition assistant.</p>
+      </div>
+    </div>
+
+    <!-- SDLC Badge -->
+    <div class="sdlc-banner">
+      <h3>🔄 Agentic AI SDLC Phases</h3>
+      <div class="sdlc-phases">
+        <div class="sdlc-phase"><span class="phase-num">1</span><span>Perceive</span></div>
+        <div class="sdlc-arrow">→</div>
+        <div class="sdlc-phase"><span class="phase-num">2</span><span>Reason</span></div>
+        <div class="sdlc-arrow">→</div>
+        <div class="sdlc-phase"><span class="phase-num">3</span><span>Act</span></div>
+        <div class="sdlc-arrow">→</div>
+        <div class="sdlc-phase"><span class="phase-num">4</span><span>Reflect</span></div>
+        <div class="sdlc-arrow">→</div>
+        <div class="sdlc-phase"><span class="phase-num">5</span><span>Respond</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROFILE TAB ───────────────────────────────────────────────────── -->
+  <section id="tab-profile" class="tab-section">
+    <div class="section-header">
+      <h2>👤 Build Your Nutrition Profile</h2>
+      <p>Provide your details to receive a personalized, AI-generated nutrition plan.</p>
+    </div>
+
+    <form id="profileForm" class="profile-form" onsubmit="submitProfile(event)">
+      <div class="form-grid">
+
+        <!-- Personal Info -->
+        <fieldset class="form-group-box">
+          <legend>📋 Personal Information</legend>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="name">Full Name *</label>
+              <input type="text" id="name" placeholder="e.g. Priya Sharma" required minlength="2" />
+            </div>
+            <div class="form-field">
+              <label for="age">Age *</label>
+              <input type="number" id="age" placeholder="e.g. 32" required min="1" max="120" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="weight">Weight (kg)</label>
+              <input type="number" id="weight" placeholder="e.g. 65" min="20" max="300" step="0.1" />
+            </div>
+            <div class="form-field">
+              <label for="height">Height (cm)</label>
+              <input type="number" id="height" placeholder="e.g. 165" min="50" max="250" />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Diet Preferences -->
+        <fieldset class="form-group-box">
+          <legend>🥦 Diet Preferences</legend>
+          <div class="form-row">
+            <div class="form-field full-width">
+              <label for="diet">Diet Type *</label>
+              <select id="diet" required>
+                <option value="">— Select diet type —</option>
+                <option value="veg">Vegetarian</option>
+                <option value="vegan">Vegan</option>
+                <option value="non-veg">Non-Vegetarian</option>
+                <option value="pescatarian">Pescatarian (Fish only)</option>
+                <option value="flexitarian">Flexitarian</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field full-width">
+              <label for="goals">Health Goals</label>
+              <select id="goals">
+                <option value="maintain a healthy lifestyle">Maintain healthy lifestyle</option>
+                <option value="lose weight gradually and safely">Lose weight</option>
+                <option value="gain healthy muscle mass">Gain muscle / weight</option>
+                <option value="manage blood sugar levels">Manage blood sugar (diabetes)</option>
+                <option value="lower blood pressure naturally">Lower blood pressure</option>
+                <option value="improve energy levels and reduce fatigue">Improve energy levels</option>
+                <option value="improve gut health and digestion">Improve gut health</option>
+                <option value="strengthen immunity">Boost immunity</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Medical History -->
+        <fieldset class="form-group-box">
+          <legend>🏥 Medical History</legend>
+          <div class="form-field full-width">
+            <label>Select any existing conditions:</label>
+            <div class="checkbox-grid">
+              <label class="checkbox-item"><input type="checkbox" value="Type 2 Diabetes" name="condition" /> 🩸 Type 2 Diabetes</label>
+              <label class="checkbox-item"><input type="checkbox" value="Type 1 Diabetes" name="condition" /> 💉 Type 1 Diabetes</label>
+              <label class="checkbox-item"><input type="checkbox" value="High Blood Pressure" name="condition" /> ❤️ High Blood Pressure</label>
+              <label class="checkbox-item"><input type="checkbox" value="High Cholesterol" name="condition" /> 🫀 High Cholesterol</label>
+              <label class="checkbox-item"><input type="checkbox" value="Thyroid Disorder" name="condition" /> 🦋 Thyroid Disorder</label>
+              <label class="checkbox-item"><input type="checkbox" value="Kidney Disease" name="condition" /> 🫘 Kidney Disease</label>
+              <label class="checkbox-item"><input type="checkbox" value="Heart Disease" name="condition" /> 💗 Heart Disease</label>
+              <label class="checkbox-item"><input type="checkbox" value="PCOS/PCOD" name="condition" /> 🌸 PCOS/PCOD</label>
+              <label class="checkbox-item"><input type="checkbox" value="Gluten Intolerance" name="condition" /> 🌾 Gluten Intolerance</label>
+              <label class="checkbox-item"><input type="checkbox" value="Lactose Intolerance" name="condition" /> 🥛 Lactose Intolerance</label>
+              <label class="checkbox-item"><input type="checkbox" value="Anemia" name="condition" /> 🩸 Anemia</label>
+              <label class="checkbox-item"><input type="checkbox" value="Osteoporosis" name="condition" /> 🦴 Osteoporosis</label>
+            </div>
+            <div class="form-field" style="margin-top:10px">
+              <label for="medical_extra">Other conditions (optional)</label>
+              <input type="text" id="medical_extra" placeholder="e.g. Gout, IBS, Food allergies…" />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Location -->
+        <fieldset class="form-group-box">
+          <legend>📍 Location</legend>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="city">City *</label>
+              <input type="text" id="city" placeholder="e.g. Mumbai" required />
+            </div>
+            <div class="form-field">
+              <label for="country">Country *</label>
+              <input type="text" id="country" placeholder="e.g. India" required />
+            </div>
+          </div>
+        </fieldset>
+
+      </div><!-- /form-grid -->
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-lg" id="generateBtn">
+          🚀 Generate My Nutrition Plan
+        </button>
+        <button type="reset" class="btn btn-ghost" onclick="clearForm()">
+          🔄 Reset Form
+        </button>
+      </div>
+    </form>
+
+    <!-- Loading state -->
+    <div id="planLoading" class="loading-container hidden">
+      <div class="spinner"></div>
+      <p class="loading-text">NutriAI is crafting your personalized plan…<br/>
+        <small>Powered by IBM Granite LLM</small></p>
+    </div>
+  </section>
+
+  <!-- ── PLAN TAB ──────────────────────────────────────────────────────── -->
+  <section id="tab-plan" class="tab-section">
+    <div class="section-header">
+      <h2>📋 Your Personalized Nutrition Plan</h2>
+      <p>Generated specifically for you by IBM Granite AI.</p>
+    </div>
+
+    <div id="planEmpty" class="empty-state">
+      <span class="empty-icon">📋</span>
+      <h3>No Plan Generated Yet</h3>
+      <p>Go to the <strong>Profile</strong> tab and fill in your details to generate your personalized nutrition plan.</p>
+      <button class="btn btn-primary" onclick="showTab('profile')">👤 Create Profile</button>
+    </div>
+
+    <div id="planContent" class="hidden">
+      <div class="plan-toolbar">
+        <div class="plan-meta" id="planMeta"></div>
+        <div class="plan-actions">
+          <button class="btn btn-secondary" onclick="downloadCurrentPlan()">
+            ⬇️ Download .md
+          </button>
+          <button class="btn btn-primary" onclick="showTab('chat')">
+            💬 Ask Follow-up
+          </button>
+          <button class="btn btn-ghost" onclick="showTab('profile')">
+            🔄 Regenerate
+          </button>
+        </div>
+      </div>
+      <div class="plan-output" id="planOutput"></div>
+    </div>
+  </section>
+
+  <!-- ── CHAT TAB ──────────────────────────────────────────────────────── -->
+  <section id="tab-chat" class="tab-section">
+    <div class="section-header">
+      <h2>💬 Chat with NutriAI</h2>
+      <p>Ask any nutrition question — your AI nutritionist is here to help.</p>
+    </div>
+
+    <!-- Quick prompts -->
+    <div class="quick-prompts">
+      <span class="quick-label">Quick questions:</span>
+      <button class="quick-btn" onclick="sendQuickMessage('What foods should I eat for better energy?')">⚡ More energy</button>
+      <button class="quick-btn" onclick="sendQuickMessage('How can I manage my blood sugar through diet?')">🩸 Blood sugar</button>
+      <button class="quick-btn" onclick="sendQuickMessage('What are high-protein vegetarian foods?')">💪 Protein sources</button>
+      <button class="quick-btn" onclick="sendQuickMessage('Give me local food recommendations for my location')">🌍 Local foods</button>
+      <button class="quick-btn" onclick="sendQuickMessage('Calculate my BMI')">📊 Calculate BMI</button>
+      <button class="quick-btn" onclick="sendQuickMessage('What are good foods for heart health?')">❤️ Heart health</button>
+    </div>
+
+    <!-- Chat window -->
+    <div class="chat-window" id="chatWindow">
+      <div class="chat-message bot-message">
+        <div class="avatar">🥗</div>
+        <div class="bubble">
+          <p>Hello! I'm <strong>NutriAI</strong>, your personal nutrition assistant powered by <strong>IBM Granite</strong>. 👋</p>
+          <p>I can help you with:</p>
+          <ul>
+            <li>🍽️ Personalized meal planning</li>
+            <li>💊 Nutrition for specific health conditions</li>
+            <li>🌍 Local & cultural food recommendations</li>
+            <li>📊 BMI calculation & weight management</li>
+            <li>💧 Hydration & lifestyle tips</li>
+          </ul>
+          <p>What would you like to know today?</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat input -->
+    <div class="chat-input-row">
+      <textarea
+        id="chatInput"
+        class="chat-textarea"
+        placeholder="Ask NutriAI anything about nutrition, diet, or health…"
+        rows="2"
+        onkeydown="handleChatKey(event)"
+      ></textarea>
+      <button class="btn btn-primary btn-send" id="sendBtn" onclick="sendMessage()">
+        ➤ Send
+      </button>
+    </div>
+    <p class="chat-hint">Press <kbd>Ctrl+Enter</kbd> to send</p>
+
+    <!-- Typing indicator -->
+    <div id="typingIndicator" class="typing-indicator hidden">
+      <div class="avatar small">🥗</div>
+      <div class="typing-dots"><span></span><span></span><span></span></div>
+    </div>
+  </section>
+
+  <!-- ── SAVED PLANS TAB ───────────────────────────────────────────────── -->
+  <section id="tab-saved" class="tab-section">
+    <div class="section-header">
+      <h2>📁 Saved Nutrition Plans</h2>
+      <p>Download previously generated nutrition plans.</p>
+    </div>
+
+    <div id="savedLoading" class="loading-container">
+      <div class="spinner small"></div>
+      <p>Loading saved plans…</p>
+    </div>
+
+    <div id="savedEmpty" class="empty-state hidden">
+      <span class="empty-icon">📁</span>
+      <h3>No Saved Plans</h3>
+      <p>Generate your first nutrition plan to see it here.</p>
+      <button class="btn btn-primary" onclick="showTab('profile')">👤 Create Plan</button>
+    </div>
+
+    <div id="savedList" class="saved-plans-grid hidden"></div>
+  </section>
+
+</main>
+
+<!-- ══════════════════════════ FOOTER ═══════════════════════════════════════ -->
+<footer class="app-footer">
+  <div class="footer-inner">
+    <p class="footer-disclaimer">
+      ⚠️ <strong>Medical Disclaimer:</strong> NutriAI provides AI-generated nutritional information for educational purposes only.
+      It is not a substitute for professional medical advice. Always consult a qualified healthcare provider before changing your diet.
+    </p>
+    <p class="footer-credits">
+      Built with ❤️ using <strong>IBM Granite LLM</strong> · Agentic AI · Flask · HAM Principles
+    </p>
+  </div>
+</footer>
+
+<!-- ══════════════════════════ MODAL ════════════════════════════════════════ -->
+<div id="toastContainer" class="toast-container"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
