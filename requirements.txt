@@ -1,0 +1,24 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# NutriAI — IBM Granite Nutrition Agent
+# Python dependencies
+# Install: pip install -r requirements.txt
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Web Framework ─────────────────────────────────────────────────────────────
+flask==3.0.3
+flask-cors==4.0.1
+Werkzeug==3.0.3
+
+# ── HTTP & Environment ────────────────────────────────────────────────────────
+requests==2.32.3
+python-dotenv==1.0.1
+
+# ── IBM watsonx.ai SDK ────────────────────────────────────────────────────────
+ibm-watson-machine-learning==1.0.360
+ibm-cloud-sdk-core==3.20.3
+
+# ── Markdown Processing ───────────────────────────────────────────────────────
+markdown==3.6
+
+# ── Production Server (optional) ─────────────────────────────────────────────
+gunicorn==22.0.0
