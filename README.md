@@ -1,4 +1,4 @@
-# 🥗 NutriAI — IBM Granite Nutrition Agent
+# 🥗 NutriAI - IBM Granite Nutrition Agent
 
 <div align="center">
 
